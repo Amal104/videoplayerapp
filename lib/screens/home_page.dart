@@ -22,7 +22,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Prime video"),
+        backgroundColor: Colors.deepPurple,
+        title: const Text(
+          "Prime video",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Consumer<VideoController>(
         builder: (context, value, child) {
@@ -62,32 +70,32 @@ class _HomePageState extends State<HomePage> {
                               )
                             : value.controller!.value.isInitialized
                                 ? Chewie(controller: value.chewieController!)
-                                :  Container(
-                                decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.deepPurple,
-                                    Colors.purple,
-                                    Color(0xADFFFFFF)
-                                  ],
-                                )),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(20.0),
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Video is loading....",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                : Container(
+                                    decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.deepPurple,
+                                        Colors.purple,
+                                        Color(0xADFFFFFF)
+                                      ],
+                                    )),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(20.0),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Video is loading....",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              )),
+                                  )),
                     Expanded(
                         flex: 2,
                         child: ListView.builder(
