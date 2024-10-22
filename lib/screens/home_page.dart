@@ -1,7 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 import 'package:videoplayerapp/controller/video_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +14,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    final provider = Provider.of<VideoController>(context, listen: false);
+    provider.initializeDownload();
   }
 
   @override
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               )
-                            : value.controller!.value.isInitialized
+                            : value.controller!.value.isInitialized && value.controller != null
                                 ? Chewie(controller: value.chewieController!)
                                 : Container(
                                     decoration: const BoxDecoration(
@@ -109,16 +110,38 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   debugPrint(index.toString());
                                   value.playAreaCheck();
-                                  value.onVideoTap(data["videoUrl"]);
+                                  // value.onVideoTap(data["videoUrl"]);
+                                  // Play from network if not downloaded, else play from local
+                                  if (value.isDownloaded[data["videoUrl"]]!) {
+                                    value
+                                        .playNetworkVideo(data["videoUrl"]);
+                                  } else {
+                                    value.playNetworkVideo(
+                                        data["videoUrl"]);
+                                  }
                                 },
                                 title: Text(data["title"]),
                                 subtitle: Text(data["time"]),
                                 leading: Image.network(data["thumbnail"]),
-                                trailing: IconButton(
-                                    onPressed: () {},
-                                    icon: data["isD"] == false
-                                        ? const Icon(Icons.download)
-                                        : const Icon(Icons.download_done)),
+                                trailing: value.isDownloading[data["videoUrl"]]!
+                                    ? CircularProgressIndicator(
+                                        value: value.downloadProgress[
+                                                data["videoUrl"]]! /
+                                            100,
+                                      )
+                                    : value.isDownloaded[data["videoUrl"]]!
+                                        ? const Icon(Icons.download_done)
+                                        : IconButton(
+                                            icon: const Icon(Icons.download),
+                                            onPressed: () async {
+                                              if (!value.isDownloading[
+                                                  data["videoUrl"]]!) {
+                                              debugPrint("download pressed");
+                                                await value.downloadVideo(
+                                                    data["videoUrl"]);
+                                              }
+                                            },
+                                          ),
                               ),
                             );
                           },
