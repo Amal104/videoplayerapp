@@ -172,7 +172,7 @@ class VideoController extends ChangeNotifier {
       final tempFile = File('${directory.path}/temp_${url.split('/').last}');
       await tempFile.writeAsBytes(decrypted);
 
-      localVideoInitialize(url);
+      localVideoInitialize(tempFile.path);
     } catch (e) {
       errorMessages[url] = 'Error playing video: ${e.toString()}';
       notifyListeners();
